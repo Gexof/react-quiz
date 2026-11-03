@@ -1,6 +1,6 @@
-import { Trophy, Award } from "lucide-react";
+import { Trophy, Award, RotateCcw } from "lucide-react";
 
-function FinishScreen({ points, maxPossiblePoints, highScore }) {
+function FinishScreen({ points, maxPossiblePoints, highScore, dispatch }) {
   const percentage = Math.ceil((points / maxPossiblePoints) * 100);
 
   const getResultMessage = () => {
@@ -16,7 +16,6 @@ function FinishScreen({ points, maxPossiblePoints, highScore }) {
         <Trophy size={38} strokeWidth={1.5} className="text-[#61dafb]" />
       </div>
 
-      {/* High Score */}
       <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-amber-400/20 bg-amber-400/5 px-4 py-2">
         <Award size={15} className="text-amber-400" />
         <span className="text-xs font-medium text-gray-400">High Score</span>
@@ -55,6 +54,14 @@ function FinishScreen({ points, maxPossiblePoints, highScore }) {
           <span className="font-bold text-[#61dafb]">{points}</span> out of{" "}
           {maxPossiblePoints} points
         </p>
+
+        <button
+          onClick={() => dispatch({ type: "restart" })}
+          className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#61dafb] px-6 py-3.5 text-sm font-bold text-[#16181d] transition-all duration-200 hover:bg-[#45c8ed] hover:shadow-[0_0_25px_rgba(97,218,251,0.18)] active:scale-[0.98]"
+        >
+          <RotateCcw size={17} strokeWidth={2.5} />
+          Restart Quiz
+        </button>
       </div>
     </div>
   );
