@@ -1,6 +1,6 @@
 import Options from "./Options";
 
-function Question({ question }) {
+function Question({ question, dispatch, answer }) {
   return (
     <div className="mx-auto w-full max-w-3xl">
       <div className="mb-8">
@@ -13,7 +13,7 @@ function Question({ question }) {
         </h2>
       </div>
 
-      <Options question={question} />
+      <Options question={question} dispatch={dispatch} answer={answer} />
     </div>
   );
 }
