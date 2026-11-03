@@ -5,15 +5,19 @@ import Loader from "./components/Loader";
 import Error from "./components/Error";
 import StartScreen from "./components/StartScreen";
 import Question from "./components/Question";
+import NextButton from "./components/NextButton";
 
 const initialState = {
   questions: [],
   status: "loading",
   index: 0,
   answer: null,
+  points: 0,
 };
 
 function reducer(state, action) {
+  const question = state.questions.at(state.index);
+
   switch (action.type) {
     case "dataRecevied":
       return { ...state, questions: action.payload, status: "ready" };
@@ -25,7 +29,17 @@ function reducer(state, action) {
       return { ...state, status: "active" };
 
     case "newAnswer":
-      return { ...state, answer: action.payload };
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          action.payload === question.correctOption
+            ? state.points + question.points
+            : state.points,
+      };
+
+    case "nextQuestion":
+      return { ...state, index: state.index + 1, answer: null };
 
     default:
       throw new Error("Action Unkown");
@@ -53,16 +67,25 @@ function App() {
 
       <MainScreen>
         {status === "loading" && <Loader />}
+
         {status === "error" && <Error />}
+
         {status === "ready" && (
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
+
         {status === "active" && (
-          <Question
-            question={questions[index]}
-            dispatch={dispatch}
-            answer={answer}
-          />
+          <div className="w-full max-w-3xl">
+            <Question
+              question={questions[index]}
+              dispatch={dispatch}
+              answer={answer}
+            />
+
+            <div className="mt-8 flex justify-end">
+              <NextButton dispatch={dispatch} answer={answer} />
+            </div>
+          </div>
         )}
       </MainScreen>
     </div>
