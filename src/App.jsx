@@ -8,6 +8,9 @@ import Question from "./components/Question";
 import NextButton from "./components/NextButton";
 import Progress from "./components/Progress";
 import FinishScreen from "./components/FinishScreen";
+import Timer from "./components/Timer";
+
+const SEC_PER_QUESTION = 30;
 
 const initialState = {
   questions: [],
@@ -16,6 +19,7 @@ const initialState = {
   answer: null,
   points: 0,
   highScore: 0,
+  secondsRemaining: null,
 };
 
 function reducer(state, action) {
@@ -29,7 +33,11 @@ function reducer(state, action) {
       return { ...state, status: "error" };
 
     case "start":
-      return { ...state, status: "active" };
+      return {
+        ...state,
+        status: "active",
+        secondsRemaining: state.questions.length * SEC_PER_QUESTION,
+      };
 
     case "newAnswer":
       return {
@@ -60,14 +68,23 @@ function reducer(state, action) {
         highScore: state.highScore,
       };
 
+    case "tick":
+      return {
+        ...state,
+        secondsRemaining: state.secondsRemaining - 1,
+        status: state.secondsRemaining === 0 ? "finished" : state.status,
+      };
+
     default:
       throw new Error("Action Unkown");
   }
 }
 
 function App() {
-  const [{ questions, status, index, answer, points, highScore }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { questions, status, index, answer, points, highScore, secondsRemaining },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   const numQuestions = questions.length;
   const maxPossiblePoints = questions.reduce(
@@ -104,13 +121,16 @@ function App() {
               maxPossiblePoints={maxPossiblePoints}
               answer={answer}
             />
+
             <Question
               question={questions[index]}
               dispatch={dispatch}
               answer={answer}
             />
 
-            <div className="mt-8 flex justify-end">
+            <div className="mt-8 flex min-h-11 items-center justify-between gap-4">
+              <Timer dispatch={dispatch} secondsRemaining={secondsRemaining} />
+
               <NextButton
                 dispatch={dispatch}
                 answer={answer}
