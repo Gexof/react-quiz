@@ -9,11 +9,11 @@ function Header() {
 
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-          The React Quiz
+          Dev Quiz
         </h1>
 
         <p className="mt-1 text-xs font-medium tracking-widest text-gray-500 uppercase">
-          Test your React knowledge
+          Developer Knowledge Challenge
         </p>
       </div>
     </header>
