@@ -148,8 +148,117 @@
       "available": true,
       "questions": [
         {
-          "question": "Which keyword declares a block-scoped variable?",
-          "options": ["var", "let", "function", "define"],
+          "question": "Which keyword is used to declare a variable that cannot be reassigned?",
+          "options": ["var", "let", "const", "static"],
+          "correctOption": 2,
+          "points": 10
+        },
+        {
+          "question": "What is the output of typeof null?",
+          "options": ["null", "undefined", "object", "number"],
+          "correctOption": 2,
+          "points": 10
+        },
+        {
+          "question": "Which operator checks both value and type equality?",
+          "options": ["==", "===", "=", "!="],
+          "correctOption": 1,
+          "points": 10
+        },
+        {
+          "question": "What is the result of 2 + '2' in JavaScript?",
+          "options": ["4", "22", "NaN", "Error"],
+          "correctOption": 1,
+          "points": 10
+        },
+        {
+          "question": "Which array method creates a new array by transforming each element?",
+          "options": ["filter()", "forEach()", "map()", "find()"],
+          "correctOption": 2,
+          "points": 10
+        },
+        {
+          "question": "What does the push() method do?",
+          "options": [
+            "Removes the first element",
+            "Adds an element to the end",
+            "Adds an element to the beginning",
+            "Removes the last element"
+          ],
+          "correctOption": 1,
+          "points": 10
+        },
+        {
+          "question": "Which of the following is NOT a primitive data type in JavaScript?",
+          "options": ["String", "Boolean", "Number", "Object"],
+          "correctOption": 3,
+          "points": 10
+        },
+        {
+          "question": "What is the output of Boolean('')?",
+          "options": ["true", "false", "undefined", "null"],
+          "correctOption": 1,
+          "points": 10
+        },
+        {
+          "question": "What is the main difference between let and var?",
+          "options": [
+            "let is function-scoped",
+            "var is block-scoped",
+            "let is block-scoped",
+            "There is no difference"
+          ],
+          "correctOption": 2,
+          "points": 10
+        },
+        {
+          "question": "Which method returns the first element that matches a condition?",
+          "options": ["map()", "filter()", "find()", "reduce()"],
+          "correctOption": 2,
+          "points": 10
+        },
+        {
+          "question": "What does the spread operator (...) do?",
+          "options": [
+            "Creates a function",
+            "Expands iterable values or object properties",
+            "Deletes array elements",
+            "Checks data types"
+          ],
+          "correctOption": 1,
+          "points": 10
+        },
+        {
+          "question": "What is a closure in JavaScript?",
+          "options": [
+            "A function that has no parameters",
+            "A function that remembers its outer lexical scope",
+            "A method that closes an object",
+            "A function that runs only once"
+          ],
+          "correctOption": 1,
+          "points": 10
+        },
+        {
+          "question": "Which keyword is used to handle errors in async functions?",
+          "options": ["catch", "throw", "try", "All of the above"],
+          "correctOption": 3,
+          "points": 10
+        },
+        {
+          "question": "What does Promise.all() do?",
+          "options": [
+            "Runs promises one after another",
+            "Waits for all promises to fulfill or one to reject",
+            "Cancels all promises",
+            "Returns only the first promise"
+          ],
+          "correctOption": 1,
+          "points": 10
+        },
+        {
+          "question": "What is the output of [1, 2, 3].filter(num => num > 1)?",
+          "options": ["[1]", "[2, 3]", "[1, 2]", "[3]"],
           "correctOption": 1,
           "points": 10
         }
