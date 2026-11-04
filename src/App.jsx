@@ -13,6 +13,8 @@ import Timer from "./components/Timer";
 const SEC_PER_QUESTION = 30;
 
 const initialState = {
+  categories: [],
+  categoriesStatus: "loading",
   questions: [],
   status: "home",
   selectedCategory: null,
@@ -27,6 +29,16 @@ function reducer(state, action) {
   const question = state.questions.at(state.index);
 
   switch (action.type) {
+    case "categoriesReceived":
+      return {
+        ...state,
+        categories: action.payload,
+        categoriesStatus: "ready",
+      };
+
+    case "categoriesFailed":
+      return { ...state, categoriesStatus: "error" };
+
     case "selectCategory":
       return {
         ...state,
@@ -96,6 +108,8 @@ function reducer(state, action) {
 function App() {
   const [
     {
+      categories,
+      categoriesStatus,
       questions,
       status,
       index,
@@ -115,6 +129,33 @@ function App() {
     0,
   );
 
+  // Fetch categories
+  useEffect(() => {
+    let isActive = true;
+
+    fetch("http://localhost:8000/categories")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch categories");
+        return res.json();
+      })
+      .then((data) => {
+        if (isActive) {
+          dispatch({
+            type: "categoriesReceived",
+            payload: data,
+          });
+        }
+      })
+      .catch(() => {
+        if (isActive) dispatch({ type: "categoriesFailed" });
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
+
+  // Fetch questions for selected category
   useEffect(() => {
     if (status !== "loadingQuestions") return;
 
@@ -147,7 +188,13 @@ function App() {
       <Header />
 
       <MainScreen>
-        {status === "home" && <StartScreen dispatch={dispatch} />}
+        {status === "home" && categoriesStatus === "loading" && <Loader />}
+
+        {status === "home" && categoriesStatus === "error" && <Error />}
+
+        {status === "home" && categoriesStatus === "ready" && (
+          <StartScreen dispatch={dispatch} categories={categories} />
+        )}
 
         {status === "loadingQuestions" && <Loader />}
 

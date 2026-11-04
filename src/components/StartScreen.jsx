@@ -1,41 +1,29 @@
 import { Code2, Braces, Atom, Globe, Palette, ArrowRight } from "lucide-react";
 
-function StartScreen({ dispatch }) {
-  const categories = [
-    {
-      id: "javascript",
-      name: "JavaScript",
-      description: "Test your JavaScript fundamentals.",
-      icon: Braces,
-      color: "#facc15",
-      available: true,
-    },
-    {
-      id: "react",
-      name: "React",
-      description: "Challenge your React knowledge.",
-      icon: Atom,
-      color: "#61dafb",
-      available: true,
-    },
-    {
-      id: "html",
-      name: "HTML",
-      description: "Explore the building blocks of the web.",
-      icon: Globe,
-      color: "#f97316",
-      available: false,
-    },
-    {
-      id: "css",
-      name: "CSS",
-      description: "Test your styling and layout skills.",
-      icon: Palette,
-      color: "#38bdf8",
-      available: false,
-    },
-  ];
+const categoryUI = {
+  javascript: {
+    description: "Test your JavaScript fundamentals.",
+    icon: Braces,
+    color: "#facc15",
+  },
+  react: {
+    description: "Challenge your React knowledge.",
+    icon: Atom,
+    color: "#61dafb",
+  },
+  html: {
+    description: "Explore the building blocks of the web.",
+    icon: Globe,
+    color: "#f97316",
+  },
+  css: {
+    description: "Test your styling and layout skills.",
+    icon: Palette,
+    color: "#38bdf8",
+  },
+};
 
+function StartScreen({ dispatch, categories }) {
   return (
     <div className="mx-auto w-full max-w-4xl px-4">
       {/* Welcome Section */}
@@ -68,7 +56,11 @@ function StartScreen({ dispatch }) {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {categories.map((category) => {
-            const Icon = category.icon;
+            const ui = categoryUI[category.id];
+
+            if (!ui) return null;
+
+            const Icon = ui.icon;
 
             return (
               <button
@@ -90,8 +82,8 @@ function StartScreen({ dispatch }) {
                   <div
                     className="flex size-12 items-center justify-center rounded-xl"
                     style={{
-                      backgroundColor: `${category.color}12`,
-                      color: category.color,
+                      backgroundColor: `${ui.color}12`,
+                      color: ui.color,
                     }}
                   >
                     <Icon size={25} strokeWidth={1.8} />
@@ -113,13 +105,13 @@ function StartScreen({ dispatch }) {
                 </h4>
 
                 <p className="mt-2 min-h-10 text-sm leading-6 text-gray-400">
-                  {category.description}
+                  {ui.description}
                 </p>
 
                 {category.available && (
                   <div
                     className="mt-5 flex items-center gap-2 text-sm font-semibold transition-transform duration-200 group-hover:translate-x-1"
-                    style={{ color: category.color }}
+                    style={{ color: ui.color }}
                   >
                     Start Quiz
                     <ArrowRight size={16} />

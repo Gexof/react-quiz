@@ -3,6 +3,7 @@
     {
       "id": "react",
       "name": "React",
+      "available": true,
       "questions": [
         {
           "question": "Which is the most popular JavaScript framework?",
@@ -144,6 +145,7 @@
     {
       "id": "javascript",
       "name": "JavaScript",
+      "available": true,
       "questions": [
         {
           "question": "Which keyword declares a block-scoped variable?",
@@ -152,6 +154,18 @@
           "points": 10
         }
       ]
+    },
+    {
+      "id": "html",
+      "name": "HTML",
+      "available": false,
+      "questions": []
+    },
+    {
+      "id": "css",
+      "name": "CSS",
+      "available": false,
+      "questions": []
     }
   ]
 }
