@@ -14,7 +14,7 @@ const SEC_PER_QUESTION = 30;
 
 const initialState = {
   questions: [],
-  status: "loading",
+  status: "home",
   selectedCategory: null,
   index: 0,
   answer: null,
@@ -27,21 +27,28 @@ function reducer(state, action) {
   const question = state.questions.at(state.index);
 
   switch (action.type) {
-    case "dataRecevied":
-      return { ...state, questions: action.payload, status: "ready" };
+    case "selectCategory":
+      return {
+        ...state,
+        selectedCategory: action.payload,
+        questions: [],
+        status: "loadingQuestions",
+        index: 0,
+        answer: null,
+        points: 0,
+        secondsRemaining: null,
+      };
+
+    case "dataReceived":
+      return {
+        ...state,
+        questions: action.payload,
+        status: "active",
+        secondsRemaining: action.payload.length * SEC_PER_QUESTION,
+      };
 
     case "dataFailed":
       return { ...state, status: "error" };
-
-    case "selectCategory":
-      return { ...state, selectedCategory: action.payload };
-
-    case "start":
-      return {
-        ...state,
-        status: "active",
-        secondsRemaining: state.questions.length * SEC_PER_QUESTION,
-      };
 
     case "newAnswer":
       return {
@@ -66,10 +73,12 @@ function reducer(state, action) {
 
     case "restart":
       return {
-        ...initialState,
-        questions: state.questions,
-        status: "ready",
-        highScore: state.highScore,
+        ...state,
+        status: "home",
+        index: 0,
+        answer: null,
+        points: 0,
+        secondsRemaining: null,
       };
 
     case "tick":
@@ -80,7 +89,7 @@ function reducer(state, action) {
       };
 
     default:
-      throw new Error("Action Unkown");
+      throw new Error("Action Unknown");
   }
 }
 
@@ -100,30 +109,49 @@ function App() {
   ] = useReducer(reducer, initialState);
 
   const numQuestions = questions.length;
+
   const maxPossiblePoints = questions.reduce(
     (prev, cur) => prev + cur.points,
     0,
   );
 
   useEffect(() => {
-    fetch("http://localhost:8000/questions")
-      .then((res) => res.json())
-      .then((data) => dispatch({ type: "dataRecevied", payload: data }))
-      .catch(() => dispatch({ type: "dataFailed" }));
-  }, []);
+    if (status !== "loadingQuestions") return;
+
+    let isActive = true;
+
+    fetch(`http://localhost:8000/categories/${selectedCategory}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch category");
+        return res.json();
+      })
+      .then((data) => {
+        if (isActive) {
+          dispatch({
+            type: "dataReceived",
+            payload: data.questions,
+          });
+        }
+      })
+      .catch(() => {
+        if (isActive) dispatch({ type: "dataFailed" });
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, [status, selectedCategory]);
 
   return (
     <div className="min-h-screen bg-[#16181d] text-white">
       <Header />
 
       <MainScreen>
-        {status === "loading" && <Loader />}
+        {status === "home" && <StartScreen dispatch={dispatch} />}
+
+        {status === "loadingQuestions" && <Loader />}
 
         {status === "error" && <Error />}
-
-        {status === "ready" && (
-          <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
-        )}
 
         {status === "active" && (
           <div className="w-full max-w-3xl">
