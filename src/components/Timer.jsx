@@ -7,8 +7,6 @@ function Timer({ dispatch, secondsRemaining }) {
 
   const isLowTime = secondsRemaining <= 30;
 
-  console.log(secondsRemaining);
-
   useEffect(() => {
     const id = setInterval(() => {
       dispatch({ type: "tick" });
