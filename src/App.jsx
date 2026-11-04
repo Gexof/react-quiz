@@ -15,6 +15,7 @@ const SEC_PER_QUESTION = 30;
 const initialState = {
   questions: [],
   status: "loading",
+  selectedCategory: null,
   index: 0,
   answer: null,
   points: 0,
@@ -31,6 +32,9 @@ function reducer(state, action) {
 
     case "dataFailed":
       return { ...state, status: "error" };
+
+    case "selectCategory":
+      return { ...state, selectedCategory: action.payload };
 
     case "start":
       return {
@@ -82,7 +86,16 @@ function reducer(state, action) {
 
 function App() {
   const [
-    { questions, status, index, answer, points, highScore, secondsRemaining },
+    {
+      questions,
+      status,
+      index,
+      answer,
+      points,
+      highScore,
+      secondsRemaining,
+      selectedCategory,
+    },
     dispatch,
   ] = useReducer(reducer, initialState);
 
